@@ -1,0 +1,11 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-DC02.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "OriginalFileName": "PowerShell.EXE",
+  "CommandLine": "powershell.exe Get-ADUser -Filter * -Properties LastLogonDate",
+  "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+  "User": "CORP\\helpdesk",
+  "_comment": "TRUE NEGATIVE — query AD ตามปกติ ไม่มี kerberoast/Rubeus/setspn ต้องไม่ alert"
+}

@@ -1,0 +1,12 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-SRV03.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\vssadmin.exe",
+  "OriginalFileName": "VSSADMIN.EXE",
+  "CommandLine": "vssadmin.exe list shadows",
+  "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+  "User": "CORP\\Administrator",
+  "IntegrityLevel": "High",
+  "_comment": "TRUE NEGATIVE — แค่ list shadow copy (ไม่ใช่ delete) ต้องไม่ alert"
+}

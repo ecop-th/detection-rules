@@ -1,0 +1,11 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-DC02.corp.example.co.th",
+  "Image": "C:\\Users\\Public\\r.exe",
+  "OriginalFileName": "Rubeus.exe",
+  "CommandLine": "r.exe kerberoast /outfile:C:\\Users\\Public\\hashes.txt",
+  "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+  "User": "CORP\\svc_sql",
+  "_comment": "TRUE POSITIVE — Rubeus kerberoast ขอ service ticket ไปแครก offline"
+}

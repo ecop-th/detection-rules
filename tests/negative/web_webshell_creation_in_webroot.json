@@ -1,0 +1,9 @@
+{
+  "EventID": 11,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "GOV-WEB01.corp.example.co.th",
+  "Image": "C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe",
+  "TargetFilename": "C:\\inetpub\\wwwroot\\app\\default.aspx",
+  "User": "CORP\\svc_deploy",
+  "_comment": "TRUE NEGATIVE — การ deploy เว็บแอปโดย msdeploy.exe (filter_legit_deploy) ต้องไม่ alert"
+}

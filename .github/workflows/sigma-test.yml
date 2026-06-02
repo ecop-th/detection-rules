@@ -49,3 +49,6 @@ jobs:
 
       - name: Lint metadata (author + attack tags required)
         run: python .github/scripts/lint_metadata.py
+
+      - name: Behaviour tests (rules match sample logs)
+        run: python tests/run_tests.py

@@ -9,10 +9,10 @@
 **Sigma rules · Sysmon config · IR playbooks** — แมป MITRE ATT&CK ครบ · ผ่าน CI · สองภาษา 🇹🇭/🇬🇧
 ก๊อปไปวางใน SIEM ของคุณได้เลย **ฟรี ไม่ต้องสมัคร ไม่ต้องกรอกฟอร์ม**
 
-[![Sigma CI](https://github.com/NattapongECOP/detection-rules/actions/workflows/sigma-test.yml/badge.svg)](https://github.com/NattapongECOP/detection-rules/actions/workflows/sigma-test.yml)
-[![Secret Scan](https://github.com/NattapongECOP/detection-rules/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/NattapongECOP/detection-rules/actions/workflows/secret-scan.yml)
+[![Sigma CI](https://github.com/ecop-th/detection-rules/actions/workflows/sigma-test.yml/badge.svg)](https://github.com/ecop-th/detection-rules/actions/workflows/sigma-test.yml)
+[![Secret Scan](https://github.com/ecop-th/detection-rules/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/ecop-th/detection-rules/actions/workflows/secret-scan.yml)
 [![License: DRL 1.1](https://img.shields.io/badge/license-DRL%201.1-blue.svg)](LICENSE)
-![Rules](https://img.shields.io/badge/dynamic/json?label=rules&color=8957e5&query=%24.count&url=https%3A%2F%2Fraw.githubusercontent.com%2FNattapongECOP%2Fdetection-rules%2Fmain%2F.stats.json)
+![Rules](https://img.shields.io/badge/dynamic/json?label=rules&color=8957e5&query=%24.count&url=https%3A%2F%2Fraw.githubusercontent.com%2Fecop-th%2Fdetection-rules%2Fmain%2F.stats.json)
 ![Made in Thailand](https://img.shields.io/badge/made%20in-%F0%9F%87%B9%F0%9F%87%AD%20Thailand-e63946)
 
 ⭐ **ถ้ามีประโยชน์กับ SOC ของคุณ ฝาก Star ไว้ติดตาม update รายเดือนด้วยนะครับ** ⭐
@@ -43,7 +43,7 @@
 pip install sigma-cli
 
 # 2) clone repo
-git clone https://github.com/NattapongECOP/detection-rules.git && cd detection-rules
+git clone https://github.com/ecop-th/detection-rules.git && cd detection-rules
 
 # 3) แปลง rule → query ของ SIEM ที่คุณใช้ แล้วเอาไปวางตั้ง alert ได้เลย
 sigma convert -t splunk    sigma/finance/proc_creation_win_lsass_dump_comsvcs.yml   # Splunk
@@ -150,7 +150,7 @@ tests/              🧪 sample logs (positive/negative)
 
 ## 🤝 อยากมีส่วนร่วม
 
-- 🌱 มือใหม่? เริ่มที่ issue ป้าย [`good first rule`](https://github.com/NattapongECOP/detection-rules/labels/good%20first%20rule) — เรายินดี mentor
+- 🌱 มือใหม่? เริ่มที่ issue ป้าย [`good first rule`](https://github.com/ecop-th/detection-rules/labels/good%20first%20rule) — เรายินดี mentor
 - 🐞 เจอ false positive? เปิด [issue](.github/ISSUE_TEMPLATE/false_positive.md) ได้เลย feedback แบบนี้มีค่ามาก
 - 📝 อยากส่ง rule? อ่าน [CONTRIBUTING.md](CONTRIBUTING.md) (มี data-handling rules — ห้ามเอา log ลูกค้าขึ้น)
 

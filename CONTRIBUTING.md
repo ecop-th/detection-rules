@@ -125,4 +125,4 @@ git commit -m "add: detect China Chopper webshell in IIS webroot"
 มองหา issue ป้าย **`good first rule`** — เป็นโจทย์ที่ scope ชัด เหมาะกับการลองทำชิ้นแรก
 ถ้า contribution ของคุณเข้าตา เราอยากชวนคุยเรื่องร่วมงานกับ ECOP ด้วยนะครับ 😉
 
-มีคำถาม? เปิด [Discussion](https://github.com/NattapongECOP/detection-rules/discussions) ได้เลย
+มีคำถาม? เปิด [Discussion](https://github.com/ecop-th/detection-rules/discussions) ได้เลย

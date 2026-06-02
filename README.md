@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🛡️ ECOP Detection Rules
+<img src="docs/assets/banner.png" alt="ECOP Detection Rules — Open-Source Sigma rules for Thai & ASEAN SOC" width="820">
+
+# ECOP Detection Rules
 
 ### Detection-as-code ที่ "พูดภาษาไทย" และเข้าใจภัยคุกคามในบ้านเรา
 

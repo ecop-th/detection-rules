@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="docs/assets/banner.png" alt="ECOP Detection Rules — Open-Source Sigma rules for Thai & ASEAN SOC" width="820">
+<img src="docs/assets/banner.jpg" alt="ECOP Detection Rules — Open-Source Sigma rules for Thai & ASEAN SOC" width="820">
 
 # ECOP Detection Rules
 
-### Detection-as-code สำหรับ SOC ไทย — เข้าใจภัยในบ้านเรา พร้อม Playbook ภาษาไทย
+### ภัยที่เห็นไม่ได้ คือภัยที่หยุดไม่ได้ — detection rules ฟรี เพื่อให้ SOC ไทยเห็นก่อน
 
 **Sigma rules · Sysmon config · IR playbooks** — แมป MITRE ATT&CK ครบ · ผ่าน CI · สองภาษา 🇹🇭/🇬🇧
 ก๊อปไปวางใน SIEM ของคุณได้เลย **ฟรี ไม่ต้องสมัคร ไม่ต้องกรอกฟอร์ม**

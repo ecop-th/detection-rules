@@ -4,7 +4,7 @@
 
 # ECOP Detection Rules
 
-### Detection-as-code ที่ "พูดภาษาไทย" และเข้าใจภัยคุกคามในบ้านเรา
+### Detection-as-code สำหรับ SOC ไทย — เข้าใจภัยในบ้านเรา พร้อม Playbook ภาษาไทย
 
 **Sigma rules · Sysmon config · IR playbooks** — แมป MITRE ATT&CK ครบ · ผ่าน CI · สองภาษา 🇹🇭/🇬🇧
 ก๊อปไปวางใน SIEM ของคุณได้เลย **ฟรี ไม่ต้องสมัคร ไม่ต้องกรอกฟอร์ม**

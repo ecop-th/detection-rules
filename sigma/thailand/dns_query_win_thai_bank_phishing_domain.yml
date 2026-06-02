@@ -1,14 +1,17 @@
-title: DNS Query to Thai Bank Brand Look-alike Domain
+title: Thai Banking Phishing / Brand-Impersonation Domain (watchlist template)
 id: fccb0689-7583-4b05-84e3-45b4bb0bc503
 status: experimental
 description: |
-  Detects DNS queries to domains that reference major Thai bank brands but are NOT
-  their official domains — a strong indicator of phishing / credential-harvesting
-  infrastructure impersonating Thai banks (a dominant fraud vector against Thai
-  retail and corporate customers). Tune the official-domain allow-list to your org.
+  Detects DNS queries to domains that impersonate Thai banking services — using
+  generic Thai-financial lure tokens plus an ORG-CONFIGURABLE brand watch-list.
+
+  ⚠️ โดยตั้งใจ: rule นี้ "ไม่ระบุชื่อธนาคารจริง" ในเวอร์ชันสาธารณะ — เพราะการใส่ชื่อแบรนด์/
+  ลูกค้าลงใน public repo อาจถูก brand-monitoring/DRP ของเจ้าของแบรนด์ตรวจพบ และดูเป็นภาพลบ
+  ให้เพิ่มแบรนด์ที่ "องค์กรของคุณ" ต้องการเฝ้าระวังใน private deployment ของคุณเอง
+  (ECOP ดูแล watch-list สดให้ลูกค้าผ่าน XIPHER DRP แบบ private)
 references:
   - https://attack.mitre.org/techniques/T1566/002/
-  - https://www.bot.or.th/  # Bank of Thailand consumer-fraud advisories
+  - https://www.bot.or.th/   # Bank of Thailand consumer-fraud advisories
 author: Nattapong Suraraungchai
 date: 2026-06-02
 tags:
@@ -20,33 +23,24 @@ logsource:
   category: dns_query
   product: windows
 detection:
-  selection_brand:
+  selection_thai_financial:
+    # โทเคน Thai-financial ทั่วไป (ไม่ใช่ชื่อแบรนด์/ลูกค้า) — ปลอดภัยที่จะ public
     QueryName|contains:
-      - 'kasikorn'
-      - 'kbank'
-      - 'scbeasy'
-      - 'krungthai'
-      - 'ktbnetbank'
-      - 'bualuang'
-      - 'bangkokbank'
-      - 'krungsri'
       - 'promptpay'
-      - 'ttbbank'
+      - 'mobilebanking'
+      - 'internetbanking'
+      - 'ibanking'
+      - 'thaibank'
+  selection_watchlist:
+    # 🔧 ปรับที่นี่ใน private fork ของคุณ — เพิ่มแบรนด์ที่ "องค์กรคุณ" เฝ้าระวัง
+    # ❌ ห้ามใส่ชื่อลูกค้า/แบรนด์ของผู้อื่นในเวอร์ชันสาธารณะ
+    QueryName|contains:
+      - 'examplebank'   # ← placeholder แทนด้วยแบรนด์ของคุณเอง
   filter_official:
     QueryName|endswith:
-      - '.kasikornbank.com'
-      - '.kasikornbankgroup.com'
-      - '.scb.co.th'
-      - '.scbeasy.com'
-      - '.krungthai.com'
-      - '.ktb.co.th'
-      - '.bangkokbank.com'
-      - '.bualuang.co.th'
-      - '.krungsri.com'
-      - '.ttbbank.com'
       - '.promptpay.io'
-  condition: selection_brand and not filter_official
+      - '.examplebank.com'   # ← โดเมนทางการของแบรนด์ใน watch-list
+  condition: (selection_thai_financial or selection_watchlist) and not filter_official
 falsepositives:
-  - บริการ/พาร์ทเนอร์ที่มีชื่อแบรนด์ธนาคารในโดเมนโดยชอบ (เพิ่มเข้า filter_official)
-  - โดเมนทางการใหม่ของธนาคารที่ยังไม่อยู่ใน allow-list
+  - บริการ/พาร์ทเนอร์ที่มีโทเคนเหล่านี้ในโดเมนโดยชอบ (เพิ่มเข้า filter_official)
 level: high

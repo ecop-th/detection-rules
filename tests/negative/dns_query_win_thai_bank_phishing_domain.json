@@ -3,8 +3,8 @@
   "Channel": "Microsoft-Windows-Sysmon/Operational",
   "Computer": "RETAIL-WS21.corp.example.co.th",
   "Image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  "QueryName": "www.scbeasy.com",
+  "QueryName": "api.promptpay.io",
   "QueryResults": "203.0.113.10",
   "User": "CORP\\customer01",
-  "_comment": "TRUE NEGATIVE — โดเมนทางการของ SCB (.scbeasy.com) ต้องไม่ alert"
+  "_comment": "TRUE NEGATIVE — โดเมนทางการ .promptpay.io ต้องไม่ alert"
 }

@@ -25,9 +25,11 @@
 
 <div align="center">
 
+<!-- STATS:START — auto-generated, อย่าแก้มือ -->
 | 🎯 **30** | 🗺️ **11** | 🛰️ **7** | ⚡ **48 ชม.** | 🇹🇭 **2 ภาษา** |
 |:---:|:---:|:---:|:---:|:---:|
 | detection rules | ATT&CK tactics | telemetry sources | emerging-threat SLA | ไทย + อังกฤษ |
+<!-- STATS:END -->
 
 </div>
 
@@ -61,6 +63,7 @@ sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvc
 
 ## 🗺️ Coverage map — เราตรวจจับอะไรได้บ้าง
 
+<!-- COVERAGE:START — auto-generated, อย่าแก้มือ -->
 ครอบ **11 จาก 14 ATT&CK tactics** — เน้นจุดที่ attacker ในภูมิภาคนี้ใช้จริง:
 
 | Tactic | Rules | ตัวอย่างที่จับได้ |
@@ -70,12 +73,13 @@ sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvc
 | 🚪 Initial Access | 4 | RDP เปิดออกเน็ต, SQLi, path traversal, **Log4Shell** |
 | 📡 Command & Control | 4 | LOLBin ต่อออกเน็ต, C2 ports, DNS แปลก |
 | ▶️ Execution | 4 | PowerShell encoded, WMIC, **Office macro phishing** |
-| 🔑 Credential Access | 3 | **LSASS dump**, NTDS.dit, Kerberoasting |
 | 📤 Exfiltration | 3 | SMB ออกนอก, **inbox forwarding (BEC)**, mailbox forward |
+| 🔑 Credential Access | 3 | **LSASS dump**, NTDS.dit, Kerberoasting |
 | 📦 Collection | 2 | M365 mail forwarding rules |
 | ⬆️ Privilege Escalation | 2 | service creation, Azure AD role |
 | ↔️ Lateral Movement | 2 | **PsExec**, WMIC remote |
 | 💥 Impact | 1 | **ลบ shadow copy (ransomware)** |
+<!-- COVERAGE:END -->
 
 📂 จัดกลุ่มตาม **sector** (finance / web / windows) และ **telemetry** (endpoint · network · firewall · cloud)
 

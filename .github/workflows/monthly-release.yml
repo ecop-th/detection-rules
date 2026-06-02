@@ -1,0 +1,71 @@
+name: Monthly Release
+
+# ออก GitHub Release อัตโนมัติทุกวันที่ 1 ของเดือน
+# → คนที่ Watch repo จะได้ notification + เป็นหลักฐานว่า repo ยัง active
+
+on:
+  schedule:
+    - cron: '0 1 1 * *'   # วันที่ 1 ของเดือน เวลา 01:00 UTC (08:00 ไทย)
+  workflow_dispatch:        # กดรันเองได้ด้วย
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute stats & tag
+        id: s
+        run: |
+          COUNT=$(find sigma emerging-threats -name '*.yml' 2>/dev/null | wc -l | tr -d ' ')
+          TAG="v$(date +%Y.%m)"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG"     >> "$GITHUB_OUTPUT"
+
+      - name: List rules added since last tag
+        id: added
+        run: |
+          LAST=$(git tag --sort=-creatordate | head -1)
+          if [ -n "$LAST" ]; then
+            ADDED=$(git diff --name-only --diff-filter=A "$LAST"..HEAD -- 'sigma/**/*.yml' 'emerging-threats/**/*.yml' | sed 's/^/- /')
+          else
+            ADDED="(first release)"
+          fi
+          {
+            echo "list<<EOF"
+            echo "${ADDED:-- (ไม่มี rule ใหม่เดือนนี้)}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create release (skip if exists)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.s.outputs.tag }}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG มีอยู่แล้ว — ข้าม"
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --title "🛡️ ECOP Detection Rules — $TAG" \
+            --notes "$(cat <<EOF
+          ## สรุปประจำเดือน ($TAG)
+
+          **รวม ${{ steps.s.outputs.count }} detection rules** ในรอบนี้
+
+          ### Rules ที่เพิ่ม/แก้รอบนี้
+          ${{ steps.added.outputs.list }}
+
+          ดูรายละเอียดทั้งหมดใน [CHANGELOG.md](../blob/main/CHANGELOG.md)
+
+          ---
+          🇹🇭 Maintained by ECOP Thailand — MDR · SOC · CTI
+          ก๊อป rule ไปวางใน SIEM ของคุณได้เลย ฟรี ภายใต้ DRL 1.1
+          EOF
+          )"
+          echo "✅ สร้าง release $TAG แล้ว"

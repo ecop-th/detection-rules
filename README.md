@@ -52,6 +52,9 @@ sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvc
 > 💡 **repo นี้ไม่ใช่โปรแกรมที่ต้องติดตั้ง** — มันคือ "ตำราสูตรตรวจจับ" คุณเอา rule ไปแปลงเป็น query
 > แล้ววางใน SIEM ของคุณเอง ของที่ใช้จริงคือ *query ที่แปลงออกมา* → [วิธีใช้แบบละเอียด](#-เข้ามาแล้วต้องทำอะไร)
 
+> 🔄 **อยากรับ rule ใหม่อัตโนมัติ?** ตั้ง `git pull` รายคืน หรือกด Watch → Releases —
+> ดู [วิธีตั้ง auto-update](docs/keeping-rules-updated.md)
+
 ---
 
 ## 🗺️ Coverage map — เราตรวจจับอะไรได้บ้าง

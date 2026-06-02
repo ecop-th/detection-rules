@@ -1,0 +1,9 @@
+{
+  "EventID": 11,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "GOV-WEB01.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\cmd.exe",
+  "TargetFilename": "C:\\inetpub\\wwwroot\\uploads\\cmd.aspx",
+  "User": "IIS APPPOOL\\DefaultAppPool",
+  "_comment": "TRUE POSITIVE — เขียนไฟล์ webshell .aspx ลง webroot โดย cmd (ไม่ใช่ deploy tool)"
+}

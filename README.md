@@ -142,6 +142,8 @@ tests/              🧪 sample logs (positive/negative)
 
 > rule เดียวที่ทำให้ SOC คนอื่น alert ท่วม ทำลายความน่าเชื่อถือมากกว่าการไม่มี rule นั้นเลย
 
+🔬 **อยากเห็นว่าใช้ได้จริง?** ดู [Proof it works](docs/proof-it-works.md) — behaviour test (positive MATCH / negative NO MATCH) + ตัวอย่าง query จริงที่แปลงเป็น Splunk / Elastic / ES\|QL
+
 ---
 
 ## 🤝 อยากมีส่วนร่วม

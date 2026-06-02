@@ -1,0 +1,11 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS07.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\mshta.exe",
+  "OriginalFileName": "MSHTA.EXE",
+  "CommandLine": "mshta.exe C:\\Program Files\\LegacyApp\\report.hta",
+  "ParentImage": "C:\\Windows\\explorer.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE NEGATIVE — mshta เปิด HTA ภายในเครื่อง (local path ไม่มี URL) ต้องไม่ alert"
+}

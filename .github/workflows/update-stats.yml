@@ -1,0 +1,39 @@
+name: Update Rule Stats
+
+# อัปเดต badge จำนวน rule อัตโนมัติทุกครั้งที่ rule เปลี่ยน
+# (.stats.json ถูกอ่านโดย badge ใน README)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sigma/**'
+      - 'emerging-threats/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate .stats.json
+        run: |
+          COUNT=$(find sigma emerging-threats -name '*.yml' 2>/dev/null | wc -l | tr -d ' ')
+          printf '{ "count": %s }\n' "$COUNT" > .stats.json
+          echo "rule count = $COUNT"
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet .stats.json; then
+            echo "ไม่มีการเปลี่ยนแปลง — ข้าม"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .stats.json
+          git commit -m "chore: auto-update rule count [skip ci]"
+          git push

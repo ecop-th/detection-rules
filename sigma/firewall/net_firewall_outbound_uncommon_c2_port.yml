@@ -1,0 +1,36 @@
+title: Outbound Connection to Uncommon C2 Ports
+id: f4bb8aaf-ef15-4ad1-a2c5-424829cff3bd
+status: experimental
+description: |
+  Detects outbound connections to ports frequently used by commodity C2 frameworks
+  and reverse shells (e.g. Metasploit/Meterpreter default 4444, common backdoor
+  ports). Useful as a low-cost net to surface beaconing that bypasses standard ports.
+references:
+  - https://attack.mitre.org/techniques/T1571/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.command-and-control
+  - attack.t1571
+  - ecop.region.asean
+logsource:
+  category: firewall
+detection:
+  selection:
+    dst_port:
+      - 4444
+      - 1337
+      - 31337
+      - 5555
+      - 6666
+      - 9001
+    action: allow
+  filter_internal:
+    dst_ip|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+  condition: selection and not filter_internal
+falsepositives:
+  - แอป/เกม/บริการภายในที่ใช้พอร์ตเหล่านี้โดยชอบ (ควร baseline แล้ว whitelist ปลายทางที่รู้จัก)
+level: medium

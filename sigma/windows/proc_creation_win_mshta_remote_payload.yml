@@ -1,0 +1,35 @@
+title: Mshta Executing Remote Payload
+id: 2b9e7d10-6c4f-4a21-8e3b-7f0c9a1d5e22
+status: experimental
+description: |
+  Detects mshta.exe loading content from a remote URL or script handler. Commonly
+  abused in phishing chains targeting Thai banking and corporate users to stage
+  follow-on malware while blending in as a signed Windows binary (LOLBin).
+references:
+  - https://attack.mitre.org/techniques/T1218/005/
+  - https://lolbas-project.github.io/lolbas/Binaries/Mshta/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.defense-evasion
+  - attack.t1218.005
+  - ecop.sector.finance
+  - ecop.region.asean
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\mshta.exe'
+    - OriginalFileName: 'MSHTA.EXE'
+  selection_remote:
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - 'ftp://'
+      - 'javascript:'
+      - 'vbscript:'
+  condition: selection_img and selection_remote
+falsepositives:
+  - แอปองค์กรรุ่นเก่าบางตัวเรียก mshta กับ HTA ภายใน (ปกติเป็น local path ไม่ใช่ URL — rule นี้กรอง local ออกอยู่แล้ว)
+level: high

@@ -1,0 +1,37 @@
+title: Registry Run Key Persistence
+id: 0863f700-d5e6-48b1-8eba-18d5a705a956
+status: experimental
+description: |
+  Detects new values written to the common Run / RunOnce autostart registry keys,
+  a classic persistence mechanism that launches an attacker payload at user logon.
+  Tune by baselining the software in your environment that legitimately autostarts.
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.persistence
+  - attack.t1547.001
+  - ecop.region.asean
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection:
+    TargetObject|contains:
+      - '\Software\Microsoft\Windows\CurrentVersion\Run\'
+      - '\Software\Microsoft\Windows\CurrentVersion\RunOnce\'
+      - '\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Run\'
+  filter_susp_path:
+    Details|contains:
+      - '\AppData\'
+      - '\Temp\'
+      - '\Public\'
+      - '\ProgramData\'
+      - 'powershell'
+      - 'mshta'
+      - 'rundll32'
+  condition: selection and filter_susp_path
+falsepositives:
+  - ซอฟต์แวร์ที่ตั้ง autostart ตอนติดตั้ง (filter ด้านบนช่วยกรองให้เหลือ path/binary ที่น่าสงสัย)
+level: medium

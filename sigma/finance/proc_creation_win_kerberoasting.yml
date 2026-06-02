@@ -1,0 +1,36 @@
+title: Kerberoasting Activity (SPN Ticket Request Tools)
+id: 0b896311-dbd2-4105-b859-ef85bdf88225
+status: experimental
+description: |
+  Detects command-line indicators of Kerberoasting — requesting service tickets for
+  accounts with SPNs to crack offline. Catches common tooling (Rubeus, Invoke-
+  Kerberoast) and native setspn enumeration. Service accounts in banking domains are
+  a prime Kerberoasting target due to weak, rarely-rotated passwords.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.credential-access
+  - attack.t1558.003
+  - ecop.sector.finance
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_tools:
+    CommandLine|contains:
+      - 'kerberoast'
+      - 'Rubeus'
+      - 'asktgs'
+      - 'Get-DomainSPNTicket'
+  selection_setspn:
+    Image|endswith: '\setspn.exe'
+    CommandLine|contains:
+      - '-q'
+      - '-t'
+  condition: selection_tools or selection_setspn
+falsepositives:
+  - admin ใช้ setspn เพื่อตรวจสอบ SPN ตามปกติ (การ enumerate ทั้งโดเมนรวดเดียวเป็นสัญญาณน่าสงสัย)
+level: high

@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # อัปเดต GitHub Actions ที่ pin ไว้ ให้ปลอดภัยอยู่เสมอ
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - security
+
+  # อัปเดต dev dependency (sigma-cli ฯลฯ)
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies

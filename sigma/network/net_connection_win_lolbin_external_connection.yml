@@ -1,0 +1,39 @@
+title: LOLBin Making an External Network Connection
+id: 59b3a00a-1570-4987-ae63-62a62f73567d
+status: experimental
+description: |
+  Detects living-off-the-land binaries initiating outbound connections to a public
+  IP. These signed Windows tools rarely need to talk to the internet directly, so an
+  external connection from them strongly suggests payload download or C2.
+references:
+  - https://attack.mitre.org/techniques/T1071/001/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.command-and-control
+  - attack.t1071.001
+  - ecop.region.asean
+logsource:
+  category: network_connection
+  product: windows
+detection:
+  selection:
+    Initiated: 'true'
+    Image|endswith:
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+  filter_internal:
+    DestinationIp|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+      - '127.0.0.0/8'
+  condition: selection and not filter_internal
+falsepositives:
+  - certutil/bitsadmin ที่ใช้ดึง CRL หรือ patch จากปลายทางที่รู้จัก (เพิ่มปลายทางเหล่านั้นใน filter)
+level: high

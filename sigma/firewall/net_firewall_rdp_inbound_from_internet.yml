@@ -1,0 +1,30 @@
+title: RDP Inbound Connection from the Internet
+id: d0ac8485-f515-4638-9119-481c80ba0cc7
+status: experimental
+description: |
+  Detects inbound RDP (3389) connections whose source is not an internal/RFC1918
+  address — i.e. RDP exposed directly to the internet. Internet-facing RDP is one
+  of the most common ransomware entry points and should almost never be allowed.
+references:
+  - https://attack.mitre.org/techniques/T1133/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.initial-access
+  - attack.t1133
+  - ecop.region.th
+logsource:
+  category: firewall
+detection:
+  selection:
+    dst_port: 3389
+    action: allow
+  filter_internal:
+    src_ip|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+  condition: selection and not filter_internal
+falsepositives:
+  - การเข้าถึง RDP ผ่านช่วง IP ของ VPN/สาขาที่ถูกต้อง (เพิ่ม CIDR เหล่านั้นใน filter_internal)
+level: high

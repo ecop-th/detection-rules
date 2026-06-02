@@ -1,0 +1,20 @@
+# ── ไฟล์ภายใน / สื่อการตลาด — ไม่ push ขึ้น public repo ──
+launch-kit.html
+repo-files-preview.html
+how-to-use.html
+
+# ── OS / editor junk ──
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ── Python ──
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ── secret scan output ──
+gitleaks-report.json

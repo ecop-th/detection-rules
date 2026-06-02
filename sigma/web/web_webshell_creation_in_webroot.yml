@@ -1,0 +1,45 @@
+title: Webshell File Creation in Web Root Directory
+id: 8f2c1a64-3e9d-4b7a-9c0e-1d5f6a2b8c44
+status: experimental
+description: |
+  Detects creation of script files (.aspx/.asp/.php/.jsp) inside common web root
+  directories — a frequent precursor to web defacement and persistent webshell
+  access against Thai government and enterprise web servers. Maps to web defacement
+  incidents observed by the ECOP MDR team.
+references:
+  - https://attack.mitre.org/techniques/T1505/003/
+  - https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-200a
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.persistence
+  - attack.t1505.003
+  - ecop.sector.gov
+  - ecop.region.th
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection_path:
+    TargetFilename|contains:
+      - '\inetpub\wwwroot\'
+      - '\htdocs\'
+      - '\www\'
+      - '\webapps\'
+  selection_ext:
+    TargetFilename|endswith:
+      - '.aspx'
+      - '.asp'
+      - '.ashx'
+      - '.php'
+      - '.jsp'
+      - '.jspx'
+  filter_legit_deploy:
+    Image|endswith:
+      - '\msdeploy.exe'
+      - '\w3wp.exe'   # ปรับออกได้ถ้า app pool ของคุณไม่ควรเขียนไฟล์ใหม่
+  condition: selection_path and selection_ext and not filter_legit_deploy
+falsepositives:
+  - การ deploy เว็บแอปด้วยเครื่องมือ CI/CD ที่ไม่ได้อยู่ใน filter (ปรับ filter ให้ตรง pipeline ของคุณ)
+  - CMS ที่อนุญาตให้อัปโหลด plugin/theme เป็นไฟล์ script (เช่น WordPress) — ควร whitelist path เฉพาะ
+level: high

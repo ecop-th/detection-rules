@@ -1,0 +1,58 @@
+# ECOP Detection Rules — gitleaks config
+# ต่อยอดจาก ruleset default ของ gitleaks + เพิ่ม rule กัน "ข้อมูลลูกค้า/internal หลุด"
+# ซึ่งเป็นความเสี่ยงอันดับ 1 ของ public detection repo (อันตรายกว่าโดน hack)
+
+title = "ECOP detection-rules gitleaks policy"
+
+[extend]
+# ใช้ rule มาตรฐานของ gitleaks เป็นฐาน (AWS key, GitHub token, private key ฯลฯ)
+useDefault = true
+
+# ──────────────────────────────────────────────────────────────
+# Custom rules — กัน PII / internal data ที่มักหลุดมากับ sample log
+# ──────────────────────────────────────────────────────────────
+
+[[rules]]
+id = "ecop-private-ipv4"
+description = "Private/internal IPv4 address (อาจเป็น IP จริงของลูกค้า — ใช้ค่า placeholder แทน)"
+regex = '''\b(10\.(?:\d{1,3}\.){2}\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.(?:\d{1,3})\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})\b'''
+tags = ["internal", "pii"]
+
+[[rules]]
+id = "ecop-thai-citizen-id"
+description = "เลขบัตรประชาชนไทย 13 หลัก (PII ตาม PDPA — ห้ามขึ้น repo เด็ดขาด)"
+regex = '''\b[1-8]\d{12}\b'''
+tags = ["pii", "pdpa"]
+
+[[rules]]
+id = "ecop-internal-domain"
+description = "Internal/corp domain ที่อาจเป็นของลูกค้าจริง (ใช้ example.co.th แทน)"
+regex = '''\b[a-z0-9-]+\.(?:corp|internal|local|ad)\b'''
+tags = ["internal"]
+
+[[rules]]
+id = "ecop-email-address"
+description = "อีเมล (อาจเป็นชื่อพนักงานลูกค้าจริง)"
+regex = '''\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'''
+tags = ["pii"]
+
+# ──────────────────────────────────────────────────────────────
+# Allowlist — ค่า placeholder ที่เราตั้งใจใช้ในตัวอย่าง ไม่ถือเป็น finding
+# ──────────────────────────────────────────────────────────────
+[allowlist]
+description = "อนุญาตค่า placeholder/ตัวอย่างที่ sanitize แล้ว"
+regexes = [
+  '''example\.co\.th''',
+  '''example\.com''',
+  '''corp\.example\.co\.th''',
+  '''nattapong@.*example''',
+  # RFC 5737 documentation IP ranges — ปลอดภัยใช้ในตัวอย่าง
+  '''192\.0\.2\.\d{1,3}''',
+  '''198\.51\.100\.\d{1,3}''',
+  '''203\.0\.113\.\d{1,3}''',
+]
+paths = [
+  '''CONTRIBUTING\.md''',   # มีตัวอย่าง regex/placeholder ในเอกสาร
+  '''\.gitleaks\.toml''',   # ไฟล์นี้เอง
+  '''README\.md''',
+]

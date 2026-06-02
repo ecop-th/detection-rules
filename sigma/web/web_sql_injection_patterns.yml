@@ -1,0 +1,35 @@
+title: Common SQL Injection Patterns in Web Requests
+id: 496380ba-0c71-4cd6-b2ac-b4f7b4605cdc
+status: experimental
+description: |
+  Detects common SQL injection probe patterns in web request URIs — UNION SELECT,
+  boolean tautologies, and stacked queries. Aimed at the early reconnaissance phase
+  of attacks against public-facing Thai government and enterprise web applications.
+references:
+  - https://attack.mitre.org/techniques/T1190/
+  - https://owasp.org/www-community/attacks/SQL_Injection
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - ecop.sector.gov
+  - ecop.region.th
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - 'union select'
+      - 'union all select'
+      - ' or 1=1'
+      - "' or '1'='1"
+      - 'information_schema'
+      - 'waitfor delay'
+      - ';--'
+      - 'xp_cmdshell'
+  condition: selection
+falsepositives:
+  - แอปที่มีคำว่า select/union ใน query string โดยสุจริต (ปรับ pattern ให้เข้ากับ app ของคุณ)
+  - เครื่องมือ scan/pentest ที่ได้รับอนุญาต
+level: high

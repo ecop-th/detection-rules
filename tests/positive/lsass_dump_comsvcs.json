@@ -1,0 +1,14 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-DC01.corp.example.co.th",
+  "UtcTime": "2026-06-01 03:14:22.118",
+  "Image": "C:\\Windows\\System32\\rundll32.exe",
+  "OriginalFileName": "RUNDLL32.EXE",
+  "CommandLine": "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump 656 C:\\Users\\Public\\lsass.dmp full",
+  "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+  "ParentCommandLine": "cmd.exe /c whoami",
+  "User": "CORP\\svc_backup",
+  "IntegrityLevel": "High",
+  "_comment": "TRUE POSITIVE — comsvcs.dll MiniDump against lsass on a finance domain controller"
+}

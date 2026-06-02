@@ -28,7 +28,7 @@ repo นี้เป็น detection content สาธารณะของ ECOP
 
 มาตรการที่บังคับใช้กับ repo (สำหรับ maintainer):
 
-- ✅ บังคับ **2FA ทั้ง organization** (`ecop-th`)
+- ✅ บังคับ **2FA ทั้ง organization** (`NattapongECOP`)
 - ✅ **Branch protection** บน `main`: require PR review, ห้าม force-push, require status checks ผ่าน
 - ✅ **Secret scanning** + **push protection** ของ GitHub เปิดใช้งาน
 - ✅ **gitleaks** สแกน secret/PII ทั้ง pre-commit และ CI

@@ -1,136 +1,168 @@
-# ECOP Detection Rules
+<div align="center">
 
-> Open-source detection content for SOC teams in Thailand & ASEAN.
-> Sigma rules · Sysmon config · IR playbooks — mapped to MITRE ATT&CK, tested, bilingual (ไทย / English).
+# 🛡️ ECOP Detection Rules
 
-[![Sigma CI](https://github.com/ecop-th/detection-rules/actions/workflows/sigma-test.yml/badge.svg)](https://github.com/ecop-th/detection-rules/actions/workflows/sigma-test.yml)
+### Detection-as-code ที่ "พูดภาษาไทย" และเข้าใจภัยคุกคามในบ้านเรา
+
+**Sigma rules · Sysmon config · IR playbooks** — แมป MITRE ATT&CK ครบ · ผ่าน CI · สองภาษา 🇹🇭/🇬🇧
+ก๊อปไปวางใน SIEM ของคุณได้เลย **ฟรี ไม่ต้องสมัคร ไม่ต้องกรอกฟอร์ม**
+
+[![Sigma CI](https://github.com/NattapongECOP/detection-rules/actions/workflows/sigma-test.yml/badge.svg)](https://github.com/NattapongECOP/detection-rules/actions/workflows/sigma-test.yml)
+[![Secret Scan](https://github.com/NattapongECOP/detection-rules/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/NattapongECOP/detection-rules/actions/workflows/secret-scan.yml)
 [![License: DRL 1.1](https://img.shields.io/badge/license-DRL%201.1-blue.svg)](LICENSE)
-![Rules](https://img.shields.io/badge/dynamic/json?label=rules&query=%24.count&url=https%3A%2F%2Fraw.githubusercontent.com%2Fecop-th%2Fdetection-rules%2Fmain%2F.stats.json)
+![Rules](https://img.shields.io/badge/dynamic/json?label=rules&color=8957e5&query=%24.count&url=https%3A%2F%2Fraw.githubusercontent.com%2FNattapongECOP%2Fdetection-rules%2Fmain%2F.stats.json)
+![Made in Thailand](https://img.shields.io/badge/made%20in-%F0%9F%87%B9%F0%9F%87%AD%20Thailand-e63946)
+
+⭐ **ถ้ามีประโยชน์กับ SOC ของคุณ ฝาก Star ไว้ติดตาม update รายเดือนด้วยนะครับ** ⭐
+
+</div>
 
 ---
 
-## ทำไมต้อง repo นี้ / Why this repo
+## 📊 At a glance
 
-มี [SigmaHQ](https://github.com/SigmaHQ/sigma) ที่ครอบคลุม detection ระดับโลกอยู่แล้ว — repo นี้ **ไม่ได้มาแข่ง** แต่มาเติมในจุดที่ของระดับโลกมองไม่เห็น:
+<div align="center">
 
-- 🇹🇭 **Threat landscape ไทย/อาเซียนจริง** — campaign ที่ลงมือกับแบงก์ โรงพยาบาล และภาครัฐในภูมิภาคนี้ (web defacement, Thai-targeted phishing, banking malware, mule-account behavior)
-- 🌏 **Bilingual ที่ใช้งานได้จริง** — ทุก rule มี playbook ภาษาไทยพร้อม context เชิงปฏิบัติ ไม่ใช่แค่แปลคำ
-- ⚡ **Emerging-threat SLA** — เมื่อมี campaign/CVE สำคัญ เราตั้งเป้าออก detection ภายใน **48 ชั่วโมง** ใน [`emerging-threats/`](emerging-threats/)
-- ✅ **Tested, ไม่ใช่แค่เขียนทิ้ง** — ทุก rule ผ่าน `sigma-cli` validation + มี false-positive note
+| 🎯 **30** | 🗺️ **11** | 🛰️ **7** | ⚡ **48 ชม.** | 🇹🇭 **2 ภาษา** |
+|:---:|:---:|:---:|:---:|:---:|
+| detection rules | ATT&CK tactics | telemetry sources | emerging-threat SLA | ไทย + อังกฤษ |
 
-Maintained by the **ECOP MDR / CTI team**. ใช้กับ SOC ของคุณได้เลย ฟรี ภายใต้ [Detection Rule License](LICENSE).
+</div>
+
+> ครอบคลุมตั้งแต่ **ผู้บุกรุกเข้ามา → ขโมย credential → เคลื่อนตัว → ปล่อย ransomware → ลบหลักฐาน**
+> ทุก rule มาจากสิ่งที่ทีม **ECOP MDR** เจอจริงในสนาม ไม่ใช่ตำราต่างประเทศแปลมา
 
 ---
 
-## โครงสร้าง / Repository layout
+## ⚡ Quick start — 30 วินาที
 
+```bash
+# 1) ติดตั้งตัวแปลง (ครั้งเดียว)
+pip install sigma-cli
+
+# 2) clone repo
+git clone https://github.com/NattapongECOP/detection-rules.git && cd detection-rules
+
+# 3) แปลง rule → query ของ SIEM ที่คุณใช้ แล้วเอาไปวางตั้ง alert ได้เลย
+sigma convert -t splunk    sigma/finance/proc_creation_win_lsass_dump_comsvcs.yml   # Splunk
+sigma convert -t sentinel  sigma/finance/proc_creation_win_lsass_dump_comsvcs.yml   # Microsoft Sentinel
+sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvcs.yml  # Elastic
 ```
-ecop-detection-rules/
-├── sigma/                  # Sigma detection rules
-│   ├── finance/            # sector: ธนาคาร / การเงิน
-│   ├── web/                # webshell, defacement, web attack
-│   ├── windows/            # endpoint / LOLBin / credential access (EDR telemetry)
-│   ├── network/            # dns_query / network_connection (EDR-fed)
-│   ├── firewall/           # firewall log: RDP/SMB/C2 ports
-│   └── m365/               # Microsoft 365 / Azure AD (cloud audit log)
-├── sysmon/                 # ECOP Sysmon baseline config (modular)
-├── playbooks/              # IR playbook ต่อ rule (TH / EN)
-├── emerging-threats/       # detection ตอบ CVE/campaign ใหม่ ภายใน 48 ชม. (เช่น Log4Shell)
-├── threat-actors/          # mapping: rule → กลุ่ม APT (ATT&CK Groups)
-├── tests/                  # sample logs + วิธี validate rule
-└── .github/                # CI, issue & PR templates
-```
 
-> 💡 **EDR rules อยู่ที่ไหน?** rule ใน `windows/` (process_creation) และ `network/` (network_connection,
-> dns_query) คือ EDR telemetry — EDR เป็น "แหล่ง log" ไม่ใช่ rule แยกประเภท
-
-แต่ละ rule ตั้งชื่อตาม convention ของ SigmaHQ:
-`<logsource>_<product>_<short_description>.yml` เช่น `proc_creation_win_mshta_remote_payload.yml`
+> 💡 **repo นี้ไม่ใช่โปรแกรมที่ต้องติดตั้ง** — มันคือ "ตำราสูตรตรวจจับ" คุณเอา rule ไปแปลงเป็น query
+> แล้ววางใน SIEM ของคุณเอง ของที่ใช้จริงคือ *query ที่แปลงออกมา* → [วิธีใช้แบบละเอียด](#-เข้ามาแล้วต้องทำอะไร)
 
 ---
 
-## เข้ามาแล้วต้องทำอะไร? / How to use this repo
+## 🗺️ Coverage map — เราตรวจจับอะไรได้บ้าง
 
-> 💡 **เข้าใจก่อน 1 ข้อ:** repo นี้ **ไม่ใช่โปรแกรมที่โหลดมาติดตั้ง** — มันคือ "ตำราสูตรตรวจจับ"
-> คุณเอา **rule (สูตร)** ไปแปลงเป็น query แล้ววางใน SIEM ของคุณเอง ของที่เอาไปใช้จริงคือ
-> *query ที่แปลงจาก Sigma* ไม่ใช่ตัวไฟล์ที่ต้องรัน
+ครอบ **11 จาก 14 ATT&CK tactics** — เน้นจุดที่ attacker ในภูมิภาคนี้ใช้จริง:
 
-### เลือกวิธีเอาไปใช้ — มี 3 แบบ
+| Tactic | Rules | ตัวอย่างที่จับได้ |
+|---|:---:|---|
+| 📌 Persistence | 8 | Run key, scheduled task, service, Azure AD admin role |
+| 🥷 Defense Evasion | 5 | mshta, regsvr32 (Squiblydoo), ล้าง event log, ปิด MFA |
+| 🚪 Initial Access | 4 | RDP เปิดออกเน็ต, SQLi, path traversal, **Log4Shell** |
+| 📡 Command & Control | 4 | LOLBin ต่อออกเน็ต, C2 ports, DNS แปลก |
+| ▶️ Execution | 4 | PowerShell encoded, WMIC, **Office macro phishing** |
+| 🔑 Credential Access | 3 | **LSASS dump**, NTDS.dit, Kerberoasting |
+| 📤 Exfiltration | 3 | SMB ออกนอก, **inbox forwarding (BEC)**, mailbox forward |
+| 📦 Collection | 2 | M365 mail forwarding rules |
+| ⬆️ Privilege Escalation | 2 | service creation, Azure AD role |
+| ↔️ Lateral Movement | 2 | **PsExec**, WMIC remote |
+| 💥 Impact | 1 | **ลบ shadow copy (ransomware)** |
+
+📂 จัดกลุ่มตาม **sector** (finance / web / windows) และ **telemetry** (endpoint · network · firewall · cloud)
+
+---
+
+## 🇹🇭 ทำไมต้อง repo นี้ — ไม่ได้มาแข่ง SigmaHQ
+
+มี [SigmaHQ](https://github.com/SigmaHQ/sigma) ระดับโลกอยู่แล้ว เรามาเติม **จุดที่ของระดับโลกมองไม่เห็น**:
+
+| | repo นี้ให้อะไรเพิ่ม |
+|---|---|
+| 🇹🇭 **เข้าใจภัยไทย/อาเซียน** | web defacement ภาครัฐ, phishing เจาะแบงก์ไทย, BEC, mule account |
+| 🌏 **Playbook ภาษาไทยใช้ได้จริง** | บอกขั้นตอนรับมือ อ้างอิง PDPA / เกณฑ์ ธปท. ไม่ใช่แค่แปลคำ |
+| ⚡ **Emerging-threat SLA 48 ชม.** | มี CVE/campaign ดัง → ออก detection ใน [`emerging-threats/`](emerging-threats/) ทันที |
+| 🎭 **Threat-actor mapping** | โยง rule → กลุ่ม APT (Lazarus, APT41, FIN7) ใน [`threat-actors/`](threat-actors/) |
+| ✅ **Tested ทุก rule** | ผ่าน `sigma-cli` + metadata lint + มี false-positive note จริง |
+
+---
+
+## 📖 เข้ามาแล้วต้องทำอะไร?
+
+เลือกวิธีตามความจริงจัง — มี 3 แบบ:
 
 | แบบ | ทำยังไง | เหมาะกับ |
 |---|---|---|
-| 🟢 **ง่ายสุด** | เปิดไฟล์ `.yml` ที่อยากได้ → กดปุ่ม **Copy** มุมขวาบน (ไม่ต้องโหลดไฟล์) | มาลองครั้งแรก เอา rule เดียว |
-| 🟡 **กลาง** | กดปุ่มเขียว **`<> Code` → Download ZIP** ได้ทุก rule | อยากได้ทั้งชุด |
-| 🟣 **จริงจัง** | `git clone` แล้ว `git pull` รับ update รายเดือนอัตโนมัติ | ทีม SOC ที่ใช้ต่อเนื่อง |
+| 🟢 **ง่ายสุด** | เปิดไฟล์ `.yml` ที่อยากได้ → กดปุ่ม **Copy** มุมขวาบน | มาลองครั้งแรก เอา rule เดียว |
+| 🟡 **กลาง** | กดปุ่มเขียว **`< > Code` → Download ZIP** | อยากได้ทั้งชุด |
+| 🟣 **จริงจัง** | `git clone` แล้ว `git pull` รับ update รายเดือน | ทีม SOC ที่ใช้ต่อเนื่อง |
 
-### 4 ขั้น จากเข้ามา → ตั้ง alert ได้จริง
-
-```
-1. เลือก rule ที่เกี่ยวกับคุณ (เช่น โฟลเดอร์ sigma/finance/)
-        │
-2. กด Copy / Download  หรือ  git clone ทั้ง repo
-        │
-3. แปลงเป็น query ของ SIEM ที่คุณใช้  →  sigma convert -t splunk <rule>
-        │
-4. เอา query ไปวางใน SIEM → กด "Save as Alert" → จบ
-        │
-   (พอ alert ดัง → เปิด playbooks/ ดูขั้นตอนรับมือต่อ)
-```
-
-> 📌 **ไม่รู้จะเริ่มยังไง?** ทำตาม [Quick start](#เริ่มใช้งาน--quick-start) ด้านล่างได้เลย — แค่ 2 คำสั่ง
-
----
-
-## เริ่มใช้งาน / Quick start
-
-```bash
-# 1. ติดตั้ง sigma-cli
-pip install sigma-cli
-
-# 2. แปลง rule เป็น query ของ SIEM ที่คุณใช้ (ตัวอย่าง: Splunk)
-sigma convert -t splunk -p sysmon sigma/web/web_webshell_creation_in_webroot.yml
-
-# backend อื่นที่รองรับ: elasticsearch, microsoft365defender, qradar, sentinel ฯลฯ
-sigma plugin list
-```
-
-ใช้ Sysmon config ของเราเป็น baseline:
-
-```bash
-# ดูหมายเหตุก่อน deploy ใน sysmon/README.md
-sysmon64.exe -accepteula -i sysmon/ecop-sysmon-baseline.xml
+```text
+เลือก rule  →  sigma convert  →  วาง query ใน SIEM  →  Save as Alert  →  ✅ เสร็จ
+                                                              │
+                                            alert ดัง → เปิด playbooks/ ดูวิธีรับมือต่อ
 ```
 
 ---
 
-## คุณภาพมาก่อนปริมาณ / Quality bar
+## 📂 โครงสร้าง repo
 
-เรายอมมี rule น้อยแต่ดี — ทุก rule ต้อง:
+```
+sigma/
+├── finance/        💰 ธนาคาร/การเงิน — LSASS, NTDS, Kerberoast, PsExec
+├── web/            🌐 webshell, SQLi, path traversal, IIS shell
+├── windows/        🪟 endpoint LOLBin / cred access (EDR telemetry)
+├── network/        🛰️ dns_query · network_connection (EDR-fed)
+├── firewall/       🔥 RDP/SMB/C2 ports
+└── m365/           ☁️ Microsoft 365 / Azure AD (cloud audit)
 
-1. ผ่าน `sigma-cli check` (syntax + schema)
-2. map กับ **MITRE ATT&CK** อย่างน้อย 1 technique
-3. มี `level` + `falsepositives` ที่เขียนจากของจริง
-4. มี sample log ใน [`tests/`](tests/) ที่ rule ควร "ยิงโดน"
-5. มี playbook คู่กันใน [`playbooks/`](playbooks/) สำหรับ rule ระดับ `high`/`critical`
+emerging-threats/   ⚡ detection ตอบ CVE ใหม่ภายใน 48 ชม. (เช่น Log4Shell)
+threat-actors/      🎭 mapping: rule → กลุ่ม APT
+playbooks/          📖 IR playbook ต่อ rule (TH/EN)
+sysmon/             🛠️ ECOP Sysmon baseline
+tests/              🧪 sample logs (positive/negative)
+```
 
-ดูวิธีเขียนและส่ง PR ที่ [CONTRIBUTING.md](CONTRIBUTING.md)
-
----
-
-## อยากมีส่วนร่วม / Contributing
-
-เปิดรับ contribution จากชุมชน SOC ไทยและภูมิภาค — ดู issue ที่ติดป้าย
-[`good first rule`](https://github.com/ecop-th/detection-rules/labels/good%20first%20rule) เพื่อเริ่ม
-
-เจอ false positive จาก rule ของเรา? เปิด issue ด้วย template
-[False Positive Report](.github/ISSUE_TEMPLATE/false_positive.md) ได้เลย — feedback แบบนี้มีค่ามาก
-
----
-
-## License
-
-Detection content อยู่ภายใต้ **Detection Rule License (DRL) 1.1** — ใช้ ดัดแปลง และนำไป deploy ใน environment ของคุณได้อย่างอิสระ ดู [LICENSE](LICENSE)
+> 💡 **EDR rules อยู่ไหน?** `windows/` (process_creation) + `network/` คือ EDR telemetry อยู่แล้ว
+> — EDR เป็น "แหล่ง log" ไม่ใช่ rule แยกประเภท
 
 ---
 
-<sub>Built & maintained by ECOP Thailand — MDR · SOC · CTI. รายงานปัญหาหรือ false positive ผ่าน GitHub Issues</sub>
+## ✅ คุณภาพมาก่อนปริมาณ
+
+เรายอมมี rule น้อยแต่ดี — ทุก rule ต้องผ่าน:
+
+`sigma-cli check` &nbsp;•&nbsp; แมป **MITRE ATT&CK** &nbsp;•&nbsp; มี `falsepositives` จากของจริง &nbsp;•&nbsp; มี sample log &nbsp;•&nbsp; rule `high`/`critical` ต้องมี playbook
+
+> rule เดียวที่ทำให้ SOC คนอื่น alert ท่วม ทำลายความน่าเชื่อถือมากกว่าการไม่มี rule นั้นเลย
+
+---
+
+## 🤝 อยากมีส่วนร่วม
+
+- 🌱 มือใหม่? เริ่มที่ issue ป้าย [`good first rule`](https://github.com/NattapongECOP/detection-rules/labels/good%20first%20rule) — เรายินดี mentor
+- 🐞 เจอ false positive? เปิด [issue](.github/ISSUE_TEMPLATE/false_positive.md) ได้เลย feedback แบบนี้มีค่ามาก
+- 📝 อยากส่ง rule? อ่าน [CONTRIBUTING.md](CONTRIBUTING.md) (มี data-handling rules — ห้ามเอา log ลูกค้าขึ้น)
+
+> ทุก rule ใส่ชื่อผู้เขียน → เป็น **portfolio สาธารณะ** ของคุณติดแบรนด์ ECOP
+
+---
+
+## 📜 License & Security
+
+- 📄 Detection content ภายใต้ **[Detection Rule License (DRL) 1.1](LICENSE)** — deploy ใน SOC/MSSP ฟรี ไม่ต้องให้เครดิต; re-publish เป็น ruleset ต้องให้เครดิต
+- 🔒 พบช่องโหว่หรือข้อมูลรั่ว? ดู **[SECURITY.md](SECURITY.md)** (รายงานแบบส่วนตัว)
+
+---
+
+<div align="center">
+
+**Built & maintained by ECOP Thailand** — MDR · SOC · CTI
+ตรวจจับภัยไซเบอร์เพื่อองค์กรไทย 🇹🇭
+
+<sub>⭐ Star · 👁️ Watch · 🍴 Fork — แล้วพบกับ update รายเดือน</sub>
+
+</div>

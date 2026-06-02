@@ -1,0 +1,36 @@
+title: Azure AD Privileged Role Assignment
+id: 3f9d5fd5-da9b-498a-9816-f217112bcb13
+status: experimental
+description: |
+  Detects a user being added to a highly privileged Azure AD / Entra ID directory
+  role (e.g. Global Administrator). Attackers grant themselves privileged roles to
+  establish durable control of the tenant — this should be tightly monitored and
+  cross-checked against approved change requests.
+references:
+  - https://attack.mitre.org/techniques/T1098/003/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1098.003
+  - ecop.region.th
+logsource:
+  product: azure
+  service: auditlogs
+detection:
+  selection_op:
+    Operation|contains:
+      - 'Add member to role'
+      - 'Add eligible member to role'
+  selection_priv:
+    ModifiedProperties|contains:
+      - 'Global Administrator'
+      - 'Privileged Role Administrator'
+      - 'Security Administrator'
+      - 'Exchange Administrator'
+      - 'Application Administrator'
+  condition: selection_op and selection_priv
+falsepositives:
+  - การมอบสิทธิ์ admin ให้พนักงานใหม่ตามกระบวนการที่ถูกต้อง (ควรตรงกับ change/ticket)
+level: high

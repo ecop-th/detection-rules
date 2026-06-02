@@ -1,0 +1,33 @@
+title: Certutil Download / Decode Abuse
+id: 4929802e-293e-4678-9b39-9afb0f620ef0
+status: experimental
+description: |
+  Detects abuse of certutil.exe to download remote files (urlcache/verifyctl) or
+  decode base64-encoded payloads — a common LOLBin technique to stage malware
+  while masquerading as a legitimate certificate utility.
+references:
+  - https://attack.mitre.org/techniques/T1105/
+  - https://lolbas-project.github.io/lolbas/Binaries/Certutil/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.command-and-control
+  - attack.t1105
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\certutil.exe'
+    - OriginalFileName: 'CertUtil.exe'
+  selection_flags:
+    CommandLine|contains:
+      - 'urlcache'
+      - 'verifyctl'
+      - '-decode'
+      - '-urlcache'
+  condition: selection_img and selection_flags
+falsepositives:
+  - การใช้ certutil จัดการ certificate ตามปกติของ admin (มักไม่มี urlcache/decode คู่กับ URL)
+level: high

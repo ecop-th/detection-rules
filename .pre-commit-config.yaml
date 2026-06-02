@@ -1,0 +1,33 @@
+# ติดตั้งครั้งเดียว:  pip install pre-commit && pre-commit install
+# หลังจากนั้น hook จะรันอัตโนมัติทุกครั้งที่ git commit
+# รันมือทั้ง repo:  pre-commit run --all-files
+
+repos:
+  # ── กันความลับ/ข้อมูลลูกค้าหลุด (ความเสี่ยงสูงสุด) ──
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+        name: gitleaks (scan secret + PII + internal data)
+
+  # ── สุขอนามัยไฟล์ทั่วไป ──
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-yaml
+        name: check YAML (รวม Sigma rules)
+        args: [--allow-multiple-documents]
+
+  # ── ตรวจ metadata standard ของ ECOP (author + ATT&CK tag + FP จริง) ──
+  - repo: local
+    hooks:
+      - id: ecop-metadata-lint
+        name: ECOP rule metadata lint
+        entry: python .github/scripts/lint_metadata.py
+        language: system
+        files: '^(sigma|emerging-threats)/.*\.yml$'
+        pass_filenames: false

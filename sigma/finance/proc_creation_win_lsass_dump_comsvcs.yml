@@ -1,0 +1,34 @@
+title: LSASS Memory Dump via comsvcs.dll MiniDump
+id: 5d3a8c92-1f7b-4e60-bc14-9a2e0d6f3b81
+status: experimental
+description: |
+  Detects credential dumping of LSASS process memory using the built-in
+  comsvcs.dll MiniDump export via rundll32. A high-confidence indicator of
+  hands-on-keyboard credential theft — frequently seen mid-intrusion against
+  financial-sector domain controllers and jump hosts before lateral movement.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+  - https://lolbas-project.github.io/lolbas/Libraries/Comsvcs/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+  - ecop.sector.finance
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\rundll32.exe'
+    - OriginalFileName: 'RUNDLL32.EXE'
+  selection_cmd:
+    CommandLine|contains|all:
+      - 'comsvcs'
+      - 'MiniDump'
+  condition: selection_img and selection_cmd
+falsepositives:
+  - แทบไม่มี legitimate use — การเรียก comsvcs MiniDump เกือบทั้งหมดเป็นพฤติกรรมไม่พึงประสงค์
+  - เครื่องมือ diagnostic ของ vendor บางตัวที่ dump process (ควรยืนยันกับเจ้าของระบบ)
+level: critical

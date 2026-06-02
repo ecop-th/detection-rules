@@ -1,0 +1,51 @@
+name: Sigma CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'sigma/**'
+      - 'emerging-threats/**'
+      - '.github/workflows/sigma-test.yml'
+
+# least-privilege: workflow นี้แค่อ่าน repo ไม่ต้องการสิทธิ์เขียนหรือ secret ใด ๆ
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Sigma rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install sigma-cli
+        run: |
+          python -m pip install --upgrade pip
+          pip install sigma-cli pyyaml
+
+      - name: Install Splunk backend (for convertibility check)
+        run: sigma plugin install splunk
+
+      - name: Check rule syntax & schema
+        run: |
+          sigma check sigma/ emerging-threats/
+
+      - name: Ensure every rule converts to a backend
+        run: |
+          set -e
+          shopt -s globstar nullglob
+          for rule in sigma/**/*.yml emerging-threats/**/*.yml; do
+            echo "::group::$rule"
+            sigma convert -t splunk -p sysmon "$rule" > /dev/null
+            echo "::endgroup::"
+          done
+
+      - name: Lint metadata (author + attack tags required)
+        run: python .github/scripts/lint_metadata.py

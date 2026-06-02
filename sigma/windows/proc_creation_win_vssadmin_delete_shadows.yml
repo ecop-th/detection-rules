@@ -1,0 +1,34 @@
+title: Shadow Copy Deletion (Ransomware Precursor)
+id: 74bd23fa-9e3c-46c3-af00-56d0db338ca3
+status: experimental
+description: |
+  Detects deletion of Volume Shadow Copies via vssadmin/wmic — a near-universal
+  step in ransomware deployment to prevent victims from restoring files. High
+  confidence: legitimate admins rarely delete all shadow copies interactively.
+references:
+  - https://attack.mitre.org/techniques/T1490/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.impact
+  - attack.t1490
+  - ecop.sector.finance
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_vss:
+    Image|endswith: '\vssadmin.exe'
+    CommandLine|contains|all:
+      - 'delete'
+      - 'shadows'
+  selection_wmic:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'shadowcopy'
+      - 'delete'
+  condition: selection_vss or selection_wmic
+falsepositives:
+  - งาน backup/maintenance บางตัวที่ลบ shadow copy เก่า (ควรยืนยันกับทีม IT — แต่ถือเป็นเหตุการณ์ที่ต้องตรวจเสมอ)
+level: high

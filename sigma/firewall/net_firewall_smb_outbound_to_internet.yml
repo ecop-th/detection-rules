@@ -1,0 +1,32 @@
+title: SMB Outbound to the Internet
+id: 23534e64-29c4-4368-9da9-8d41e7329b3b
+status: experimental
+description: |
+  Detects SMB (445/139) traffic leaving the network to a public destination. SMB
+  should stay internal — outbound SMB to the internet indicates data exfiltration,
+  forced authentication / hash theft, or misconfiguration that leaks NTLM creds.
+references:
+  - https://attack.mitre.org/techniques/T1048/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.exfiltration
+  - attack.t1048
+  - ecop.region.asean
+logsource:
+  category: firewall
+detection:
+  selection:
+    dst_port:
+      - 445
+      - 139
+    action: allow
+  filter_internal:
+    dst_ip|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+  condition: selection and not filter_internal
+falsepositives:
+  - การเชื่อมต่อไปยัง cloud file service ที่ใช้ SMB โดยตั้งใจ (เพิ่ม IP ปลายทางที่รู้จักใน filter)
+level: high

@@ -1,0 +1,37 @@
+title: Path Traversal / Local File Inclusion Attempt
+id: b1e5aa17-19fa-40d4-9e90-69c92b68f6c8
+status: experimental
+description: |
+  Detects directory traversal and local file inclusion patterns in web requests
+  (../, encoded variants, and attempts to read sensitive system files). Often a
+  precursor to web defacement or source-code/credential theft on exposed servers.
+references:
+  - https://attack.mitre.org/techniques/T1190/
+  - https://owasp.org/www-community/attacks/Path_Traversal
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - ecop.sector.gov
+  - ecop.region.th
+logsource:
+  category: webserver
+detection:
+  selection_traversal:
+    c-uri|contains:
+      - '../../'
+      - '..%2f'
+      - '%2e%2e%2f'
+      - '..\\..\\'
+  selection_target:
+    c-uri|contains:
+      - '/etc/passwd'
+      - 'win.ini'
+      - 'boot.ini'
+      - '/proc/self/environ'
+      - 'web.config'
+  condition: selection_traversal or selection_target
+falsepositives:
+  - URL ที่มี ".." จาก client ที่เขียนผิดพลาดเป็นครั้งคราว (การจับคู่กับไฟล์เป้าหมายช่วยลด FP)
+level: high

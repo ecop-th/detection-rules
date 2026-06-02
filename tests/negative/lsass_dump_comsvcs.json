@@ -1,0 +1,14 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS22.corp.example.co.th",
+  "UtcTime": "2026-06-01 09:02:10.554",
+  "Image": "C:\\Windows\\System32\\rundll32.exe",
+  "OriginalFileName": "RUNDLL32.EXE",
+  "CommandLine": "rundll32.exe shell32.dll,Control_RunDLL desk.cpl",
+  "ParentImage": "C:\\Windows\\explorer.exe",
+  "ParentCommandLine": "C:\\Windows\\Explorer.EXE",
+  "User": "CORP\\nattapong",
+  "IntegrityLevel": "Medium",
+  "_comment": "TRUE NEGATIVE — benign rundll32 opening Display settings; no comsvcs/MiniDump, must NOT alert"
+}

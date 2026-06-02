@@ -1,0 +1,31 @@
+title: M365 Mailbox-Level External Forwarding Configured
+id: e1f7016a-5249-4d80-bab8-53b30b4c5643
+status: experimental
+description: |
+  Detects Set-Mailbox operations that enable SMTP forwarding at the mailbox level
+  (ForwardingSmtpAddress / DeliverToMailboxAndForward). Unlike inbox rules this is
+  configured by an admin or via compromised admin creds, and silently copies all
+  mail to an attacker address.
+references:
+  - https://attack.mitre.org/techniques/T1114/003/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.collection
+  - attack.exfiltration
+  - attack.t1114.003
+  - ecop.region.th
+logsource:
+  product: m365
+  service: exchange
+detection:
+  selection_op:
+    Operation: 'Set-Mailbox'
+  selection_fwd:
+    Parameters|contains:
+      - 'ForwardingSmtpAddress'
+      - 'DeliverToMailboxAndForward'
+  condition: selection_op and selection_fwd
+falsepositives:
+  - การตั้ง forwarding โดย admin ตามคำขอที่ถูกต้อง (ควรมี change/ticket รองรับ)
+level: high

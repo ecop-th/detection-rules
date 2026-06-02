@@ -1,0 +1,34 @@
+Detection Rule License (DRL) 1.1
+
+Copyright (c) 2026 ECOP Thailand
+
+Detection content in this repository (Sigma rules, Sysmon configuration,
+playbooks, and accompanying samples) is licensed under the Detection Rule
+License (DRL) version 1.1.
+
+You are free to:
+
+  - USE the detection content in any environment, commercial or otherwise,
+    including managed security services;
+  - MODIFY and adapt the content to your own telemetry and tooling;
+  - REDISTRIBUTE the content and your modifications.
+
+Under the following terms:
+
+  1. ATTRIBUTION — When you redistribute the content (modified or not) as
+     detection content (e.g. in another rule repository, ruleset, or
+     publication), you must retain this license and credit "ECOP Thailand"
+     as the original source. Attribution is NOT required when you merely
+     deploy the rules to detect threats in your own environment or in
+     services you provide.
+
+  2. NO WARRANTY — The content is provided "as is", without warranty of any
+     kind. Detection logic may produce false positives or false negatives.
+     You are responsible for testing and tuning before production use.
+
+The full text of the Detection Rule License is available at:
+https://github.com/SigmaHQ/Detection-Rule-License
+
+For the avoidance of doubt: deploying these rules in your SOC, including a
+commercial MSSP/MDR service, does not require attribution. Re-publishing them
+as a competing public ruleset does.

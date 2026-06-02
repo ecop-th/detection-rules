@@ -1,0 +1,31 @@
+title: Azure AD MFA / Strong Authentication Disabled
+id: 601d5d7d-c26d-49c5-9a82-3f2f73e1e2b0
+status: experimental
+description: |
+  Detects disabling of multi-factor authentication or deletion of a user's
+  authentication method in Azure AD / Entra ID. Attackers weaken MFA after
+  compromising an account to ensure persistent access — a high-value identity
+  defense-evasion signal.
+references:
+  - https://attack.mitre.org/techniques/T1556/006/
+author: Nattapong Suraraungchai
+date: 2026-06-01
+tags:
+  - attack.persistence
+  - attack.defense-evasion
+  - attack.t1556.006
+  - ecop.region.th
+logsource:
+  product: azure
+  service: auditlogs
+detection:
+  selection:
+    Operation|contains:
+      - 'Disable Strong Authentication'
+      - 'Delete authentication method'
+      - 'User registered security info'
+      - 'Admin disabled MFA'
+  condition: selection
+falsepositives:
+  - Helpdesk รีเซ็ตวิธียืนยันตัวตนให้ผู้ใช้ตามคำขอที่ถูกต้อง (ตรวจว่าใครเป็นผู้กระทำและมี ticket หรือไม่)
+level: high

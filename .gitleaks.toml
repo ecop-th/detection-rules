@@ -46,13 +46,23 @@ regexes = [
   '''example\.com''',
   '''corp\.example\.co\.th''',
   '''nattapong@.*example''',
+  # อีเมลบริษัท ECOP เอง (contact ที่ตั้งใจเปิดเผย ไม่ใช่ PII ลูกค้า)
+  '''[\w.+-]+@ecop\.co\.th''',
+  '''[\w.+-]+@bcg-ecop\.net''',
   # RFC 5737 documentation IP ranges — ปลอดภัยใช้ในตัวอย่าง
   '''192\.0\.2\.\d{1,3}''',
   '''198\.51\.100\.\d{1,3}''',
   '''203\.0\.113\.\d{1,3}''',
+  # RFC1918 network base addresses ที่ใช้ใน detection logic (CIDR) — ไม่ใช่ host IP จริง
+  # (host IP ที่รั่วจริง เช่น 10.20.30.45 จะไม่ match base address เหล่านี้)
+  '''10\.0\.0\.0''',
+  '''172\.(1[6-9]|2[0-9]|3[01])\.0\.0''',
+  '''192\.168\.0\.0''',
+  '''127\.0\.0\.0''',
 ]
 paths = [
   '''CONTRIBUTING\.md''',   # มีตัวอย่าง regex/placeholder ในเอกสาร
   '''\.gitleaks\.toml''',   # ไฟล์นี้เอง
   '''README\.md''',
+  '''SECURITY\.md''',       # มีอีเมล contact ของบริษัท
 ]

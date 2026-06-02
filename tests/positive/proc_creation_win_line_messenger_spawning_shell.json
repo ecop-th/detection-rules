@@ -1,0 +1,10 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS33.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "CommandLine": "powershell.exe -nop -w hidden -enc SQBFAFgA...",
+  "ParentImage": "C:\\Users\\somchai\\AppData\\Local\\LINE\\bin\\LINE.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE POSITIVE — LINE spawn PowerShell (มัลแวร์ส่งผ่าน LINE ถูกเปิด)"
+}

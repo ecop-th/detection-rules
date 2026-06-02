@@ -1,0 +1,36 @@
+title: LINE Messenger Spawning a Command Shell
+id: b6f9c1f3-8122-4296-beaf-e1d7c7db1ca9
+status: experimental
+description: |
+  Detects the LINE desktop messenger spawning a command interpreter or script host.
+  LINE is the dominant messaging app in Thailand and a common malware-delivery
+  channel for Thai-targeted campaigns; the LINE client spawning cmd/PowerShell is a
+  strong sign that a malicious file received via LINE was executed.
+references:
+  - https://attack.mitre.org/techniques/T1204/002/
+author: Nattapong Suraraungchai
+date: 2026-06-02
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_parent:
+    ParentImage|endswith: '\LINE.exe'
+  selection_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+  condition: selection_parent and selection_child
+falsepositives:
+  - LINE updater/installer ที่อาจเรียก process ระบบ (พบไม่บ่อย — ควร baseline)
+level: high

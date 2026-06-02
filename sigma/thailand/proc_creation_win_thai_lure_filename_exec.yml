@@ -1,0 +1,45 @@
+title: Execution of File with Thai-Language Phishing Lure Name
+id: ea2e395d-9a61-4561-91ec-1ae548136652
+status: experimental
+description: |
+  Detects execution of an executable/script whose filename contains common Thai-
+  language social-engineering lure words (invoice, receipt, tax, court summons,
+  parcel, bank). Thai-targeted phishing frequently disguises malware with Thai file
+  names plus a double extension (e.g. "ใบแจ้งหนี้.pdf.exe") to trick local users.
+references:
+  - https://attack.mitre.org/techniques/T1204/002/
+author: Nattapong Suraraungchai
+date: 2026-06-02
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - ecop.region.th
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_lure:
+    Image|contains:
+      - 'ใบแจ้งหนี้'
+      - 'ใบเสร็จ'
+      - 'สลิป'
+      - 'หมายเรียก'
+      - 'หมายศาล'
+      - 'ภาษี'
+      - 'แจ้งความ'
+      - 'พัสดุ'
+      - 'ธนาคาร'
+      - 'โอนเงิน'
+  selection_ext:
+    Image|endswith:
+      - '.exe'
+      - '.scr'
+      - '.js'
+      - '.vbs'
+      - '.hta'
+      - '.bat'
+      - '.cmd'
+  condition: selection_lure and selection_ext
+falsepositives:
+  - ไฟล์/เครื่องมือภายในที่ตั้งชื่อภาษาไทยโดยชอบและเป็น executable (พบไม่บ่อย — ควร baseline)
+level: high

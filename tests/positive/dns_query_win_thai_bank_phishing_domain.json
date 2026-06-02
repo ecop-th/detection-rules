@@ -1,0 +1,10 @@
+{
+  "EventID": 22,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "RETAIL-WS21.corp.example.co.th",
+  "Image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "QueryName": "scbeasy-secure-login.xyz",
+  "QueryResults": "203.0.113.66",
+  "User": "CORP\\customer01",
+  "_comment": "TRUE POSITIVE — โดเมนปลอมอ้างแบรนด์ SCB (scbeasy) ที่ไม่ใช่โดเมนทางการ"
+}

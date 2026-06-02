@@ -1,0 +1,10 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS44.corp.example.co.th",
+  "Image": "C:\\Program Files\\Adobe\\Acrobat\\Acrobat.exe",
+  "CommandLine": "\"Acrobat.exe\" \"C:\\Users\\somchai\\Downloads\\ใบแจ้งหนี้ค่าไฟ.pdf\"",
+  "ParentImage": "C:\\Windows\\explorer.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE NEGATIVE — เปิด PDF จริงด้วย Acrobat (Image ไม่ใช่ executable ลวง) ต้องไม่ alert"
+}

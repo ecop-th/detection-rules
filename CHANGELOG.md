@@ -6,6 +6,16 @@
 
 ## [Unreleased]
 
+### Added — 🇹🇭 Thai-specific rules (3) — จุดขายไทยแท้
+- `dns_query_win_thai_bank_phishing_domain` — โดเมนปลอมอ้างแบรนด์แบงก์ไทย (T1566.002)
+- `proc_creation_win_line_messenger_spawning_shell` — LINE ส่งมัลแวร์แล้วถูกเปิด (T1204.002)
+- `proc_creation_win_thai_lure_filename_exec` — ไฟล์ลวงชื่อภาษาไทย + double extension (T1204.002)
+- เพิ่ม behaviour test (positive/negative) ครบทั้ง 3 ตัว
+
+### Changed — ความโปร่งใส (จาก honest review)
+- ปรับคำเคลม "tested ทุก rule" → ระบุชัดว่า rule สำคัญมี behaviour test (~9 ตัว) ที่เหลือผ่าน syntax/lint
+- เพิ่มหัวข้อ Acknowledgements ให้เครดิต SigmaHQ / MITRE ATT&CK / LOLBAS + ระบุว่าทีม ECOP MDR review
+
 ### Added — ขยาย coverage เป็น 30 rules
 **firewall/ (3)** — `net_firewall_rdp_inbound_from_internet` (T1133), `net_firewall_smb_outbound_to_internet` (T1048), `net_firewall_outbound_uncommon_c2_port` (T1571)
 **network/EDR (2)** — `dns_query_win_suspicious_tld` (T1071.004), `net_connection_win_lolbin_external_connection` (T1071.001)

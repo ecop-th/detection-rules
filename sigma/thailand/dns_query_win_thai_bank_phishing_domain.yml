@@ -1,0 +1,52 @@
+title: DNS Query to Thai Bank Brand Look-alike Domain
+id: fccb0689-7583-4b05-84e3-45b4bb0bc503
+status: experimental
+description: |
+  Detects DNS queries to domains that reference major Thai bank brands but are NOT
+  their official domains — a strong indicator of phishing / credential-harvesting
+  infrastructure impersonating Thai banks (a dominant fraud vector against Thai
+  retail and corporate customers). Tune the official-domain allow-list to your org.
+references:
+  - https://attack.mitre.org/techniques/T1566/002/
+  - https://www.bot.or.th/  # Bank of Thailand consumer-fraud advisories
+author: Nattapong Suraraungchai
+date: 2026-06-02
+tags:
+  - attack.initial-access
+  - attack.t1566.002
+  - ecop.sector.finance
+  - ecop.region.th
+logsource:
+  category: dns_query
+  product: windows
+detection:
+  selection_brand:
+    QueryName|contains:
+      - 'kasikorn'
+      - 'kbank'
+      - 'scbeasy'
+      - 'krungthai'
+      - 'ktbnetbank'
+      - 'bualuang'
+      - 'bangkokbank'
+      - 'krungsri'
+      - 'promptpay'
+      - 'ttbbank'
+  filter_official:
+    QueryName|endswith:
+      - '.kasikornbank.com'
+      - '.kasikornbankgroup.com'
+      - '.scb.co.th'
+      - '.scbeasy.com'
+      - '.krungthai.com'
+      - '.ktb.co.th'
+      - '.bangkokbank.com'
+      - '.bualuang.co.th'
+      - '.krungsri.com'
+      - '.ttbbank.com'
+      - '.promptpay.io'
+  condition: selection_brand and not filter_official
+falsepositives:
+  - บริการ/พาร์ทเนอร์ที่มีชื่อแบรนด์ธนาคารในโดเมนโดยชอบ (เพิ่มเข้า filter_official)
+  - โดเมนทางการใหม่ของธนาคารที่ยังไม่อยู่ใน allow-list
+level: high

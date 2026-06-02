@@ -1,0 +1,10 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS44.corp.example.co.th",
+  "Image": "C:\\Users\\somchai\\Downloads\\ใบแจ้งหนี้ค่าไฟ.pdf.exe",
+  "CommandLine": "\"C:\\Users\\somchai\\Downloads\\ใบแจ้งหนี้ค่าไฟ.pdf.exe\"",
+  "ParentImage": "C:\\Windows\\explorer.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE POSITIVE — ไฟล์ลวงชื่อไทย 'ใบแจ้งหนี้' + double extension .pdf.exe"
+}

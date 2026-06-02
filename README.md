@@ -26,7 +26,7 @@
 <div align="center">
 
 <!-- STATS:START — auto-generated, อย่าแก้มือ -->
-| 🎯 **30** | 🗺️ **11** | 🛰️ **7** | ⚡ **48 ชม.** | 🇹🇭 **2 ภาษา** |
+| 🎯 **33** | 🗺️ **11** | 🛰️ **7** | ⚡ **48 ชม.** | 🇹🇭 **2 ภาษา** |
 |:---:|:---:|:---:|:---:|:---:|
 | detection rules | ATT&CK tactics | telemetry sources | emerging-threat SLA | ไทย + อังกฤษ |
 <!-- STATS:END -->
@@ -34,7 +34,7 @@
 </div>
 
 > ครอบคลุมตั้งแต่ **ผู้บุกรุกเข้ามา → ขโมย credential → เคลื่อนตัว → ปล่อย ransomware → ลบหลักฐาน**
-> ทุก rule มาจากสิ่งที่ทีม **ECOP MDR** เจอจริงในสนาม ไม่ใช่ตำราต่างประเทศแปลมา
+> Curated & reviewed โดยทีม **ECOP MDR** — รวม rule ที่เจาะภัยคนไทยโดยเฉพาะใน [`sigma/thailand/`](sigma/thailand/)
 
 ---
 
@@ -69,10 +69,10 @@ sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvc
 | Tactic | Rules | ตัวอย่างที่จับได้ |
 |---|:---:|---|
 | 📌 Persistence | 8 | Run key, scheduled task, service, Azure AD admin role |
+| ▶️ Execution | 6 | PowerShell encoded, WMIC, **Office macro phishing** |
+| 🚪 Initial Access | 5 | RDP เปิดออกเน็ต, SQLi, path traversal, **Log4Shell** |
 | 🥷 Defense Evasion | 5 | mshta, regsvr32 (Squiblydoo), ล้าง event log, ปิด MFA |
-| 🚪 Initial Access | 4 | RDP เปิดออกเน็ต, SQLi, path traversal, **Log4Shell** |
 | 📡 Command & Control | 4 | LOLBin ต่อออกเน็ต, C2 ports, DNS แปลก |
-| ▶️ Execution | 4 | PowerShell encoded, WMIC, **Office macro phishing** |
 | 📤 Exfiltration | 3 | SMB ออกนอก, **inbox forwarding (BEC)**, mailbox forward |
 | 🔑 Credential Access | 3 | **LSASS dump**, NTDS.dit, Kerberoasting |
 | 📦 Collection | 2 | M365 mail forwarding rules |
@@ -91,11 +91,11 @@ sigma convert -t elasticsearch sigma/finance/proc_creation_win_lsass_dump_comsvc
 
 | | repo นี้ให้อะไรเพิ่ม |
 |---|---|
-| 🇹🇭 **เข้าใจภัยไทย/อาเซียน** | web defacement ภาครัฐ, phishing เจาะแบงก์ไทย, BEC, mule account |
+| 🇹🇭 **rule ที่เจาะคนไทยจริง** | [`sigma/thailand/`](sigma/thailand/) — โดเมนปลอมแบงก์ไทย, LINE ส่งมัลแวร์, ไฟล์ลวงชื่อภาษาไทย (กำลังทยอยเพิ่ม) |
 | 🌏 **Playbook ภาษาไทยใช้ได้จริง** | บอกขั้นตอนรับมือ อ้างอิง PDPA / เกณฑ์ ธปท. ไม่ใช่แค่แปลคำ |
 | ⚡ **Emerging-threat SLA 48 ชม.** | มี CVE/campaign ดัง → ออก detection ใน [`emerging-threats/`](emerging-threats/) ทันที |
 | 🎭 **Threat-actor mapping** | โยง rule → กลุ่ม APT (Lazarus, APT41, FIN7) ใน [`threat-actors/`](threat-actors/) |
-| ✅ **Tested ทุก rule** | ผ่าน `sigma-cli` + metadata lint + มี false-positive note จริง |
+| ✅ **ทดสอบจริง** | ทุก rule ผ่าน `sigma-cli` + lint; rule สำคัญมี **behaviour test** → [ดูหลักฐาน](docs/proof-it-works.md) |
 
 ---
 
@@ -126,7 +126,8 @@ sigma/
 ├── windows/        🪟 endpoint LOLBin / cred access (EDR telemetry)
 ├── network/        🛰️ dns_query · network_connection (EDR-fed)
 ├── firewall/       🔥 RDP/SMB/C2 ports
-└── m365/           ☁️ Microsoft 365 / Azure AD (cloud audit)
+├── m365/           ☁️ Microsoft 365 / Azure AD (cloud audit)
+└── thailand/       🇹🇭 ภัยที่เจาะคนไทยจริง — โดเมนปลอมแบงก์ไทย, LINE, ไฟล์ลวงชื่อไทย
 
 emerging-threats/   ⚡ detection ตอบ CVE ใหม่ภายใน 48 ชม. (เช่น Log4Shell)
 threat-actors/      🎭 mapping: rule → กลุ่ม APT
@@ -142,13 +143,14 @@ tests/              🧪 sample logs (positive/negative)
 
 ## ✅ คุณภาพมาก่อนปริมาณ
 
-เรายอมมี rule น้อยแต่ดี — ทุก rule ต้องผ่าน:
+เรายอมมี rule น้อยแต่ดี — **มาตรฐานบังคับสำหรับ rule ทุกตัว:**
 
-`sigma-cli check` &nbsp;•&nbsp; แมป **MITRE ATT&CK** &nbsp;•&nbsp; มี `falsepositives` จากของจริง &nbsp;•&nbsp; มี sample log &nbsp;•&nbsp; rule `high`/`critical` ต้องมี playbook
+`sigma-cli check` &nbsp;•&nbsp; แมป **MITRE ATT&CK** &nbsp;•&nbsp; มี `falsepositives` จากของจริง &nbsp;•&nbsp; rule `high`/`critical` มี playbook
 
 > rule เดียวที่ทำให้ SOC คนอื่น alert ท่วม ทำลายความน่าเชื่อถือมากกว่าการไม่มี rule นั้นเลย
 
-🔬 **อยากเห็นว่าใช้ได้จริง?** ดู [Proof it works](docs/proof-it-works.md) — behaviour test (positive MATCH / negative NO MATCH) + ตัวอย่าง query จริงที่แปลงเป็น Splunk / Elastic / ES\|QL
+🔬 **อยากเห็นว่าใช้ได้จริง?** rule สำคัญมี **behaviour test** (positive ต้อง MATCH / negative ต้อง NO MATCH) รันใน CI ทุก push — ดู [Proof it works](docs/proof-it-works.md)
+> 📊 *ความโปร่งใส: ตอนนี้ ~9 rules มี behaviour test แล้ว กำลังทยอยเพิ่มให้ครบทุกตัว — rule ที่เหลือผ่าน syntax + lint ครบ*
 
 ---
 
@@ -159,6 +161,18 @@ tests/              🧪 sample logs (positive/negative)
 - 📝 อยากส่ง rule? อ่าน [CONTRIBUTING.md](CONTRIBUTING.md) (มี data-handling rules — ห้ามเอา log ลูกค้าขึ้น)
 
 > ทุก rule ใส่ชื่อผู้เขียน → เป็น **portfolio สาธารณะ** ของคุณติดแบรนด์ ECOP
+
+---
+
+## 🙏 Acknowledgements / เครดิต
+
+ยืนบนไหล่ของชุมชน detection — เราอ้างอิงและให้เครดิต:
+- [SigmaHQ](https://github.com/SigmaHQ/sigma) — มาตรฐาน Sigma และแรงบันดาลใจของ generic detection หลายตัว
+- [MITRE ATT&CK](https://attack.mitre.org/) — กรอบการแมป technique
+- [LOLBAS](https://lolbas-project.github.io/) — ข้อมูล living-off-the-land binaries
+
+> rule ทั้งหมด **curated และ review โดยทีม ECOP MDR analysts** (CREST / OSCP / CISSP)
+> rule ที่ปรับ/อ้างอิงจากชุมชนจะระบุที่มาในฟิลด์ `references` ของแต่ละไฟล์
 
 ---
 

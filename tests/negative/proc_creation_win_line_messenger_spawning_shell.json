@@ -1,0 +1,10 @@
+{
+  "EventID": 1,
+  "Channel": "Microsoft-Windows-Sysmon/Operational",
+  "Computer": "FIN-WS33.corp.example.co.th",
+  "Image": "C:\\Windows\\System32\\cmd.exe",
+  "CommandLine": "cmd.exe /c echo hello",
+  "ParentImage": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "User": "CORP\\somchai",
+  "_comment": "TRUE NEGATIVE — cmd ถูก spawn โดย Chrome (ไม่ใช่ LINE) ต้องไม่ alert"
+}

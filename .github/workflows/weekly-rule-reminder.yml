@@ -1,0 +1,49 @@
+name: Weekly Rule Drop
+
+# เปิด issue เตือนให้เติม rule ใหม่ "อาทิตย์ละ 1 ตัว" — กลไกกัน repo ตาย (ความเสี่ยง #1)
+# ~4 rules/เดือน → รวบออกเป็น Monthly Release พอดี
+# ทำงานบน GitHub ล้วน ไม่พึ่งระบบภายนอก
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'   # ทุกวันจันทร์ 02:00 UTC (09:00 ไทย)
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open weekly rule-drop issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          WEEK=$(date +'%Y-%m-%d')
+          gh issue create --repo "${{ github.repository }}" \
+            --title "🗓️ Weekly Rule Drop — สัปดาห์ $WEEK" \
+            --body "$(cat <<'EOF'
+          ## เป้าหมายสัปดาห์นี้: เติม detection rule ใหม่ **1 ตัว**
+
+          > repo ที่อัปเดตสม่ำเสมอ = แบรนด์ที่น่าเชื่อถือ · 1 rule/สัปดาห์ คุมจังหวะให้ repo ไม่มีวันตาย
+
+          ### ขั้นตอน (15–30 นาที)
+          - [ ] เช็ก **[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)** หา CVE ที่ถูกใช้โจมตีจริง
+          - [ ] หรือเลือก TTP จาก [`threat-actors/`](../blob/main/threat-actors) ที่ยังครอบไม่ครบ
+          - [ ] เขียน Sigma rule 1 ตัว ตามมาตรฐาน ([CONTRIBUTING.md](../blob/main/CONTRIBUTING.md))
+          - [ ] `python3 .github/scripts/lint_metadata.py` ต้องผ่าน
+          - [ ] เพิ่ม sample log ใน `tests/` + อัปเดต `CHANGELOG.md`
+          - [ ] เปิด PR → review → merge
+
+          ### คลังไอเดีย (เลือกสัก 1)
+          | สัปดาห์ | โฟกัส |
+          |---|---|
+          | 1 | CVE ระดับ KEV ที่เพิ่งออก → `emerging-threats/` |
+          | 2 | Endpoint / LOLBin ใหม่ → `windows/` |
+          | 3 | Cloud / identity (M365 / Azure AD) → `m365/` |
+          | 4 | Threat ภาคการเงิน/อาเซียน → `finance/` |
+
+          _issue นี้สร้างอัตโนมัติทุกวันจันทร์โดย Weekly Rule Drop workflow — ปิดเมื่อ merge rule ของสัปดาห์แล้ว_
+          EOF
+          )"
